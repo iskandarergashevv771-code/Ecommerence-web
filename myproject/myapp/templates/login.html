@@ -1,0 +1,61 @@
+    {% extends 'base.html' %}
+    {% block content %}
+<link rel="stylesheet" href="login.css">
+    {% for xabar in messages %}
+    <h1>{{xabar}}</h1>
+    {% endfor %}
+    <form action="" method="POST">
+        {% csrf_token %}
+        <div>
+            <input type="text" placeholder="Username" name="username"> <br>
+            <input type="text" placeholder="Password" name="password"> <br>
+            <button>Akkaunt ochish</button>
+        </div>
+    </form>
+<style>
+body {
+    background: #f2f2f2;
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.login-box {
+    background: white;
+    padding: 30px;
+    width: 300px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px #ccc;
+}
+
+h2 {
+    text-align: center;
+    color: #333;
+}
+
+input {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+button {
+    width: 100%;
+    padding: 10px;
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #0056b3;
+}
+</style>
+    {% endblock %}

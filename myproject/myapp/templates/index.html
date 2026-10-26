@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block content %}
+
+{% for xabar in messages %}
+{{xabar}}
+{% endfor %}
+<h1>Hello world</h1>
+<div>
+    
+    <h1>Mahsulotlar</h1>
+    {% for x in mahsulot %}
+        <img src="{{ x.image.url }}" alt="">
+        <a href="{% url 'product' x.slug %}"><h1>{{x.name}}</h1></a>
+        {{ x.name }}
+        {{ x.narxi }}
+        {{ x.holati }}
+        {{ x.miqdori }}
+
+    
+    </div>
+
+    <div>
+        <p>👁 {{ x.korishlar}} marta korilgan</p>
+        <form method="post" action="{% url 'like' x.slug %}">
+             {% csrf_token %}
+             <button type="submit" class="like-btn {% if liked %}liked{% endif %}">
+                 {% if liked %}❤️ Yoqdi{% else %} Yoqtirish {% endif %}
+                 ({{ x.likes.count }})
+             </button>
+        </form>
+        
+    </div>
+    {% endfor %}
+
+{% endblock %}

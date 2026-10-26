@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="categories">
+    {% for kategoriya in category %}
+    <a href="?kategoriya={{ kategoriya.id }}">
+        {{ kategoriya.nomi }}
+    </a>
+    {% endfor %}
+</div>
+
+<h1>Mahsulotlar</h1>
+
+<div>
+    <!-- products o'rniga product deb o'zgartirildi (views.py dagi kontekstga qarab) -->
+    <h1>{{ product.name }}</h1>
+
+    {% if product.image %}
+    <img src="{{ product.image.url }}" alt="rasm topilmadi">
+    {% endif %}
+
+    <p>Narxi : {{ product.narxi }}</p>
+    <p>Ko'rishlar : {{ product.korishlar }}</p>
+    <span>Tavsifi: {{ product.tavsifi }}</span>
+    <p>Miqdori : {{ product.miqdori }}</p>
+    <!-- Savatga qo'shish tugmasi -->
+    <a href="{% url 'add_to_cart' slug=product.slug %}">
+    🛒 Savatga qo'shish
+    </a>
+
+    <!-- Wishlist tugmasi -->
+    {% if user.is_authenticated %}
+    <a href="{% url 'toggle_wishlist' product.id %}" class="wishlist-btn">
+        ❤️ Sevimlilarga qo'shish/olish
+    </a>
+    {% endif %}
+
+    <!-- O'rtacha Reyting -->
+    <p><b>O'rtacha reyting:</b> ⭐️ {{ average_rating }} / 5 ({{ reviews.count }} ta sharh)</p>
+
+    <hr>
+
+    <h3>Mijozlarning sharhlari</h3>
+    {% if reviews %}
+    <ul>
+        {% for review in reviews %}
+        <li style="margin-bottom: 15px; list-style: none; background: #f9f9f9; padding: 10px; border-radius: 5px;">
+            <b>{{ review.user.username }}</b> —
+            <span style="color: orange;">
+                {% if review.rating == 1 %}⭐️
+                {% elif review.rating == 2 %}⭐️⭐️
+                {% elif review.rating == 3 %}⭐️⭐️⭐️
+                {% elif review.rating == 4 %}⭐️⭐️⭐️⭐️
+                {% elif review.rating == 5 %}⭐️⭐️⭐️⭐️⭐️
+                {% endif %}
+            </span>
+            <small style="float: right; color: gray;">{{ review.created_at|date:"d.m.Y H:i" }}</small>
+            <p style="margin-top: 5px;">{{ review.comment }}</p>
+        </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <p>Hozircha bu mahsulotga sharh yozilmagan. Birinchi bo'lib yozing!</p>
+    {% endif %}
+
+    <hr>
+
+    <!-- SHARH QOLDIRISH FORMASI -->
+    <h3>Sharh qoldirish</h3>
+    {% if request.user.is_authenticated %}
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit"
+            style="padding: 8px 15px; background: green; color: white; border: none; cursor: pointer;">Sharh
+            yuborish</button>
+    </form>
+    {% else %}
+    <p>Sharh qoldirish uchun <a href="{% url 'login' %}">tizimga kiring</a>.</p>
+    {% endif %}
+</div>
+
+{% endblock %}
